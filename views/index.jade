@@ -1,0 +1,10 @@
+#wrapper.index
+	h1= title
+	p Welcome to <strong>#{title}</strong> we're currently in <em>closed alpha testing</em>. But you'll be able to sign up for a beta account soon.
+	p In the meantime you can find us on twitter at <a href="http://twitter.com/tmaiapp" title="Follow us for info and updates">@tmaiapp</a>
+	- if (req.loggedIn)
+		p Signed in as: #{req.user.sourceInfo.name} (<a href="/auth/logout">Logout</a>)
+	- else
+		p Sign in with: <a href="/auth/twitter">Twitter</a>, <a href="/auth/facebook">Facebook</a>, <a href="/auth/google">Google</a>
+	
+	

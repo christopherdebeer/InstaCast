@@ -1,0 +1,29 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #c6d2e4;
+  color: #1B145A;
+}
+
+#wrapper {
+	max-width: 500px;
+	margin:0 auto;	
+	padding-top: 20px;
+}
+
+.index {text-align: center;}
+.index h1 {
+	background: url("/images/logo-lrg.jpg") left top no-repeat transparent;
+	width: 400px;
+	height: 500px;
+	text-index: -999em;
+	font-size: 0;
+	line-height: 0;
+	margin: 0 auto;
+}
+
+a {
+  color: #FE0000;
+  text-decoration: none;
+}
