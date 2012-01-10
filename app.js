@@ -5,8 +5,8 @@
 
 var express     = require('express'), 
     mongoose    = require('mongoose'),
-    config      = require('./config'),
-    db          = require('./dbconfig'),
+    config      = require('./lib/config'),
+    db          = require('./lib/dbconfig'),
     everyauth   = require('everyauth'),
     EventEmitter  = require('events').EventEmitter,
     ee          = new EventEmitter();
@@ -55,7 +55,7 @@ function addUser (source, sourceUser) {
     newUser.sourceInfo.avatarUrl = sourceUser.profile_image_url || sourceUser.picture || "https://graph.facebook.com/"+sourceUser.id+"/picture";
 
     newUser.save(function(err){
-      if (err) {console.log("didnt add user due to error, most likely it existed");}
+      if (err) {console.log("Existing user signed in - ["+newUser.id+"]");}
       else {
         usersById.push(newUser);
       }
@@ -65,19 +65,18 @@ function addUser (source, sourceUser) {
 }
 
 everyauth.twitter 
-  .consumerKey('qzcaG1VSmDsVoMopRj7ow')
-  .consumerSecret('x3B2NAJhGTVySyPwqQnNog7PSz2WTlerD51SDUayZ0')
+  .consumerKey(config.twitter.id)
+  .consumerSecret(config.twitter.secret)
   .callbackPath('/auth/twitter/callback')
   .findOrCreateUser( function (session, accessToken, accessTokenSecret, twitUser) {
     return usersById["tw"+twitUser.id] || (usersById["tw"+twitUser.id] = addUser('twitter', twitUser));
   })
   .redirectPath('/');
 
-everyauth.everymodule.logoutPath('/auth/logout');
 
 everyauth.facebook
-  .appId('279664682090931')
-  .appSecret('b2488d37aad7071ff5d363d7d993287d')
+  .appId(config.facebook.id)
+  .appSecret(config.facebook.secret)
   .handleAuthCallbackError( function (req, res) {})
   .findOrCreateUser( function (session, accessToken, accessTokExtra, fbUserMetadata) {
     return usersById["fb"+fbUserMetadata.id] || (usersById["fb"+fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
@@ -85,24 +84,17 @@ everyauth.facebook
   .redirectPath('/');
 
 everyauth.google
-  .appId('656292807405.apps.googleusercontent.com')
-  .appSecret('iK37xhWzEaLVZrdHCZyOMuol')
+  .appId(config.google.id)
+  .appSecret(config.google.secret)
   .scope('https://www.googleapis.com/auth/userinfo.profile') // What you want access to
   .callbackPath('/auth/google/callback')
-  .handleAuthCallbackError( function (req, res) {
-    // If a user denies your app, Google will redirect the user to
-    // /auth/facebook/callback?error=access_denied
-    // This configurable route handler defines how you want to respond to
-    // that.
-    // If you do not configure this, everyauth renders a default fallback
-    // view notifying the user that their authentication failed and why.
-  })
+  .handleAuthCallbackError( function (req, res) {})
   .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
-    console.log("GOOGLE: ", googleUserMetadata)
     return usersById["gl"+googleUserMetadata.id] || (usersById["gl"+googleUserMetadata.id] = addUser('google', googleUserMetadata));
   })
   .redirectPath('/');
 
+everyauth.everymodule.logoutPath('/auth/logout');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// Configuration //////////////////////////////////////////////////////////////
