@@ -14,7 +14,7 @@ html, body {
 
 .index {text-align: center;}
 .index h1 {
-	background: url("/images/logo-lrg.jpg") left top no-repeat transparent;
+	background: url("/img/logo-lrg.jpg") left top no-repeat transparent;
 	width: 400px;
 	height: 500px;
 	text-index: -999em;
