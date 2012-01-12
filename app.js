@@ -129,7 +129,11 @@ app.configure('production', function(){
 });
 
 
-var routes = require('./routes')(app);
+var routes = require('./routes')(app, db, ee);
+
+ee.on("*", function(data) {
+  console.log("Event emmitter emmited: ", data);
+})
 
 
 app.listen(config.port, config.ip);

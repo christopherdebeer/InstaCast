@@ -1,0 +1,53 @@
+#wrapper.admin
+	h1 tellmeaboutit admin interface
+	div#count
+		div.users
+			span.label Users:
+			span.value #{data.users.length}
+		div.sca
+			span.label SC Accounts (<a href="https://soundcloud.com/connect?scope=non-expiring&client_id=#{config.soundcloud.id}&response_type=code_and_token&redirect_uri=#{config.soundcloud.redirectUri}">Add</a>):
+			span.value #{data.sca.length}
+		div.tracks
+			span.label Tracks:
+			span.value #{data.tracks.length}
+	div#sml-count
+		div.proUsers
+			span.label Pro Accounts:
+			span.value #{data.proAccounts.length}
+		div.freeUsers
+			span.label Free Accounts:
+			span.value #{data.freeAccounts.length}
+		div.divider &nbsp;
+		div.freecluster
+			span.label In Free Cluster:
+			span.value #{data.freeCluster.length}
+		div.procluster
+			span.label In Pro Cluster:
+			span.value #{data.proCluster.length}
+		div.unused
+			span.label Unused Accounts:
+			span.value #{data.unusedCluster	.length}
+		div.divider &nbsp;
+		div.saved
+			span.label Saved Tracks:
+			span.value #{data.savedTracks.length}
+		div.temp
+			span.label Expiring Tracks:
+			span.value #{data.tempTracks.length}
+	div.listing
+		ul#users
+			li.title Users
+			for user in data.users
+				li
+					a(href="/user/#{user.id}/")
+						img(src="#{user.sourceInfo.avatarUrl}")
+						span.username #{user.sourceInfo.screenName}
+						span.type [#{user.type}]
+		ul#tracks
+			li.title Tracks
+			for track in data.tracks
+				li
+					a(href="/track/#{track._id}/")
+						span.trackname #{track._id}
+						span.type [#{track.type}]
+
